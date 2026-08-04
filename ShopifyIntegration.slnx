@@ -1,3 +1,9 @@
 <Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".csharpierrc.json" />
+  </Folder>
+  <Project Path="ShopifyIntegration.Application/ShopifyIntegration.Application.csproj" />
   <Project Path="ShopifyIntegration.Console/ShopifyIntegration.Console.csproj" />
+  <Project Path="ShopifyIntegration.Domain/ShopifyIntegration.Domain.csproj" />
+  <Project Path="ShopifyIntegration.Infrastructure/ShopifyIntegration.Infrastructure.csproj" />
 </Solution>
