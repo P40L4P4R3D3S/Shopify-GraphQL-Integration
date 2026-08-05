@@ -9,4 +9,6 @@ public sealed class ShopifyOptions
     public string AccessToken { get; init; } = string.Empty;
 
     public string ApiVersion { get; init; } = string.Empty;
+
+    public int NumberOfProducts { get; init; }
 }

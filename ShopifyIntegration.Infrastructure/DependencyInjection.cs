@@ -31,6 +31,14 @@ public static class DependencyInjection
                 options => !string.IsNullOrWhiteSpace(options.ApiVersion),
                 "Shopify:ApiVersion es obligatorio."
             )
+            .Validate(
+                options => options.NumberOfProducts > 0,
+                "Shopify:NumberOfProducts debe ser mayor que cero."
+            )
+            .Validate(
+                options => options.NumberOfProducts <= 250,
+                "Shopify:NumberOfProducts no puede ser mayor que 250."
+            )
             .ValidateOnStart();
 
         services.AddHttpClient<IShopifyService, ShopifyService>(

@@ -2,7 +2,7 @@
 
 namespace ShopifyIntegration.Infrastructure.GraphQL.Models;
 
-internal sealed class GraphQlErrorResponse
+public sealed class GraphQlErrorResponse
 {
     [JsonPropertyName("message")]
     public string Message { get; init; } = string.Empty;

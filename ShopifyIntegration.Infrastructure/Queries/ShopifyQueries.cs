@@ -11,4 +11,20 @@ internal static class ShopifyQueries
           }
         }
         """;
+
+    public const string GetProducts = """
+        query GetProducts($first: Int!) {
+          products(first: $first) {
+            edges {
+              node {
+                id
+                title
+                vendor
+                productType
+                status
+              }
+            }
+          }
+        }
+        """;
 }
