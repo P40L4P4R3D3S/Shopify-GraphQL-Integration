@@ -1,10 +1,10 @@
-﻿using System;
-using System.Net.Http.Headers;
+﻿using System.Net.Http.Headers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using ShopifyIntegration.Application.Abstractions;
 using ShopifyIntegration.Infrastructure.Configuration;
+using ShopifyIntegration.Infrastructure.GraphQL.Clients;
 using ShopifyIntegration.Infrastructure.Services;
 
 namespace ShopifyIntegration.Infrastructure;
@@ -41,30 +41,35 @@ public static class DependencyInjection
             )
             .ValidateOnStart();
 
-        services.AddHttpClient<IShopifyService, ShopifyService>(
-            static (serviceProvider, httpClient) =>
-            {
-                ShopifyOptions options = serviceProvider
-                    .GetRequiredService<IOptions<ShopifyOptions>>()
-                    .Value;
-
-                string storeDomain = NormalizeStoreDomain(options.StoreDomain);
-
-                httpClient.BaseAddress = new Uri(
-                    $"https://{storeDomain}/admin/api/" + $"{options.ApiVersion}/"
-                );
-
-                httpClient.DefaultRequestHeaders.Add("X-Shopify-Access-Token", options.AccessToken);
-
-                httpClient.DefaultRequestHeaders.Accept.Add(
-                    new MediaTypeWithQualityHeaderValue("application/json")
-                );
-
-                httpClient.Timeout = TimeSpan.FromSeconds(30);
-            }
+        services.AddHttpClient<IShopifyGraphQlClient, ShopifyGraphQlClient>(
+            ConfigureShopifyHttpClient
         );
 
+        services.AddTransient<IShopifyService, ShopifyService>();
+        services.AddTransient<IProductService, ProductService>();
         return services;
+    }
+
+    private static void ConfigureShopifyHttpClient(
+        IServiceProvider serviceProvider,
+        HttpClient httpClient
+    )
+    {
+        ShopifyOptions options = serviceProvider
+            .GetRequiredService<IOptions<ShopifyOptions>>()
+            .Value;
+
+        string storeDomain = NormalizeStoreDomain(options.StoreDomain);
+
+        httpClient.BaseAddress = new Uri($"https://{storeDomain}/admin/api/{options.ApiVersion}/");
+
+        httpClient.DefaultRequestHeaders.Add("X-Shopify-Access-Token", options.AccessToken);
+
+        httpClient.DefaultRequestHeaders.Accept.Add(
+            new MediaTypeWithQualityHeaderValue("application/json")
+        );
+
+        httpClient.Timeout = TimeSpan.FromSeconds(30);
     }
 
     private static string NormalizeStoreDomain(string storeDomain)

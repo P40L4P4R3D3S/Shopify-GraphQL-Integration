@@ -6,18 +6,18 @@ namespace ShopifyIntegration.Application.UseCases.GetProducts;
 
 public sealed class GetProductsHandler : IGetProductsHandler
 {
-    private readonly IShopifyService _shopifyService;
+    private readonly IProductService _productService;
 
-    public GetProductsHandler(IShopifyService shopifyService)
+    public GetProductsHandler(IProductService productService)
     {
-        _shopifyService = shopifyService;
+        _productService = productService;
     }
 
     public async Task<IReadOnlyList<ProductDto>> HandleAsync(
         CancellationToken cancellationToken = default
     )
     {
-        IReadOnlyList<Product> products = await _shopifyService.GetProductsAsync(cancellationToken);
+        IReadOnlyList<Product> products = await _productService.GetProductsAsync(cancellationToken);
 
         return products
             .Select(product => new ProductDto(
@@ -27,6 +27,7 @@ public sealed class GetProductsHandler : IGetProductsHandler
                 product.ProductType,
                 product.Status
             ))
+            .OrderBy(product => product.Title)
             .ToList();
     }
 }

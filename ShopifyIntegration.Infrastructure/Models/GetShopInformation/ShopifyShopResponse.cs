@@ -1,5 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 
+namespace ShopifyIntegration.Infrastructure.Models.GetShopInformation;
+
 internal sealed class ShopifyShopResponse
 {
     [JsonPropertyName("name")]

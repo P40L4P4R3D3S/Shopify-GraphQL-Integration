@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace ShopifyIntegration.Infrastructure.GraphQL.Models;
+namespace ShopifyIntegration.Infrastructure.Models.GetShopInformation;
 
 internal sealed class ShopQueryData
 {
