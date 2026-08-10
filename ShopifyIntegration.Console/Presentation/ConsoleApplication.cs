@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ShopifyIntegration.Application.DTOs;
 using ShopifyIntegration.Application.Exceptions;
+using ShopifyIntegration.Application.UseCases.GetOrders;
 using ShopifyIntegration.Application.UseCases.GetProducts;
 using ShopifyIntegration.Application.UseCases.GetShopInformation;
 
@@ -13,14 +14,17 @@ public sealed class ConsoleApplication
 {
     private readonly IGetShopInformationHandler _shopHandler;
     private readonly IGetProductsHandler _productsHandler;
+    private readonly IGetOrdersHandler _ordersHandler;
 
     public ConsoleApplication(
         IGetShopInformationHandler shopHandler,
-        IGetProductsHandler productsHandler
+        IGetProductsHandler productsHandler,
+        IGetOrdersHandler ordersHandler
     )
     {
         _shopHandler = shopHandler;
         _productsHandler = productsHandler;
+        _ordersHandler = ordersHandler;
     }
 
     public async Task RunAsync(CancellationToken cancellationToken = default)
@@ -36,6 +40,10 @@ public sealed class ConsoleApplication
             System.Console.WriteLine();
 
             await DisplayProductsAsync(cancellationToken);
+
+            System.Console.WriteLine();
+
+            await DisplayOrdersAsync(cancellationToken);
         }
         catch (ShopifyIntegrationException exception)
         {
@@ -52,6 +60,44 @@ public sealed class ConsoleApplication
             System.Console.Error.WriteLine("Ocurrió un error inesperado:");
 
             System.Console.Error.WriteLine(exception.Message);
+        }
+    }
+
+    private async Task DisplayOrdersAsync(CancellationToken cancellationToken)
+    {
+        IReadOnlyList<OrderDto> orders = await _ordersHandler.HandleAsync(cancellationToken);
+
+        System.Console.WriteLine("Ordenes");
+
+        System.Console.WriteLine("------------------------");
+
+        if (orders.Count == 0)
+        {
+            System.Console.WriteLine("No se encontraron ordenes en la tienda.");
+
+            return;
+        }
+
+        for (int index = 0; index < orders.Count; index++)
+        {
+            OrderDto order = orders[index];
+
+            System.Console.WriteLine();
+            System.Console.WriteLine($"Producto {index + 1}");
+
+            System.Console.WriteLine("----------------------------------------");
+
+            System.Console.WriteLine($"Id:        {order.id}");
+
+            System.Console.WriteLine($"Numero de Orden:    {order.name}");
+
+            System.Console.WriteLine($"Cliente: {order.customerName}");
+
+            System.Console.WriteLine($"Fecha de creacion:      {order.createdAt}");
+
+            System.Console.WriteLine($"Estado de Pago:    {order.financialStatus}");
+            System.Console.WriteLine($"Estado de Orden:    {order.fulfillmentStatus}");
+            System.Console.WriteLine($"Precio:    {order.totalAmount} {order.currencyCode}");
         }
     }
 

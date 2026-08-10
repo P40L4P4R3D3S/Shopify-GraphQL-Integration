@@ -11,4 +11,5 @@ public sealed class ShopifyOptions
     public string ApiVersion { get; init; } = string.Empty;
 
     public int NumberOfProducts { get; init; }
+    public int NumberOfOrders { get; init; }
 }

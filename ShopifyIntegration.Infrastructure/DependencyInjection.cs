@@ -39,6 +39,14 @@ public static class DependencyInjection
                 options => options.NumberOfProducts <= 250,
                 "Shopify:NumberOfProducts no puede ser mayor que 250."
             )
+            .Validate(
+                options => options.NumberOfOrders > 0,
+                "Shopify:NumberOfOrders debe ser mayor que cero."
+            )
+            .Validate(
+                options => options.NumberOfOrders <= 25,
+                "Shopify:NumberOfOrders no puede ser mayor que 25."
+            )
             .ValidateOnStart();
 
         services.AddHttpClient<IShopifyGraphQlClient, ShopifyGraphQlClient>(
@@ -47,6 +55,7 @@ public static class DependencyInjection
 
         services.AddTransient<IShopifyService, ShopifyService>();
         services.AddTransient<IProductService, ProductService>();
+        services.AddTransient<IOrderService, OrderService>();
         return services;
     }
 

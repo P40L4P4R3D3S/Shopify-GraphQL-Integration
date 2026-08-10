@@ -27,4 +27,29 @@ internal static class ShopifyQueries
           }
         }
         """;
+
+    public const string GetOrders = """
+        query GetOrders($first: Int!) {
+          orders(first: $first){
+            edges {
+              node {
+                id
+                name
+                customer {
+                  displayName
+                }
+                createdAt
+                displayFinancialStatus
+                displayFulfillmentStatus
+                totalPriceSet {
+                  shopMoney {
+                    amount
+                    currencyCode
+                  }
+                }
+              }
+            }
+          }
+        }
+        """;
 }
