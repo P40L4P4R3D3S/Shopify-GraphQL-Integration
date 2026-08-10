@@ -6,5 +6,8 @@ namespace ShopifyIntegration.Infrastructure.Models.GetOrders
     {
         [JsonPropertyName("displayName")]
         public string DisplayName { get; init; } = string.Empty;
+
+        [JsonPropertyName("email")]
+        public string Email { get; init; } = string.Empty;
     }
 }

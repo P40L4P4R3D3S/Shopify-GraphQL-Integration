@@ -12,4 +12,5 @@ public sealed class ShopifyOptions
 
     public int NumberOfProducts { get; init; }
     public int NumberOfOrders { get; init; }
+    public int NumberOfLineItems { get; init; }
 }

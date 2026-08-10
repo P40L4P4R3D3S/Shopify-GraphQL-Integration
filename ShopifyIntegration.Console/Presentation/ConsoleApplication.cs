@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 using ShopifyIntegration.Application.DTOs;
 using ShopifyIntegration.Application.Exceptions;
 using ShopifyIntegration.Application.UseCases.GetOrders;
+using ShopifyIntegration.Application.UseCases.GetPaidOrders;
 using ShopifyIntegration.Application.UseCases.GetProducts;
 using ShopifyIntegration.Application.UseCases.GetShopInformation;
+using ShopifyIntegration.Application.UseCases.GetUnfulfilledOrders;
 
 namespace ShopifyIntegration.Console.Presentation;
 
@@ -15,16 +17,22 @@ public sealed class ConsoleApplication
     private readonly IGetShopInformationHandler _shopHandler;
     private readonly IGetProductsHandler _productsHandler;
     private readonly IGetOrdersHandler _ordersHandler;
+    private readonly IGetPaidOrdersHandler _paidOrdersHandler;
+    private readonly IGetUnfulfilledOrdersHandler _unfulfilledOrdersHandler;
 
     public ConsoleApplication(
         IGetShopInformationHandler shopHandler,
         IGetProductsHandler productsHandler,
-        IGetOrdersHandler ordersHandler
+        IGetOrdersHandler ordersHandler,
+        IGetPaidOrdersHandler paidOrdersHandler,
+        IGetUnfulfilledOrdersHandler unfulfilledOrdersHandler
     )
     {
         _shopHandler = shopHandler;
         _productsHandler = productsHandler;
         _ordersHandler = ordersHandler;
+        _paidOrdersHandler = paidOrdersHandler;
+        _unfulfilledOrdersHandler = unfulfilledOrdersHandler;
     }
 
     public async Task RunAsync(CancellationToken cancellationToken = default)
@@ -44,6 +52,14 @@ public sealed class ConsoleApplication
             System.Console.WriteLine();
 
             await DisplayOrdersAsync(cancellationToken);
+
+            System.Console.WriteLine();
+
+            await DisplayPaidOrdersAsync(cancellationToken);
+
+            System.Console.WriteLine();
+
+            await DisplayUnfulfilledOrdersAsync(cancellationToken);
         }
         catch (ShopifyIntegrationException exception)
         {
@@ -67,13 +83,36 @@ public sealed class ConsoleApplication
     {
         IReadOnlyList<OrderDto> orders = await _ordersHandler.HandleAsync(cancellationToken);
 
-        System.Console.WriteLine("Ordenes");
+        DisplayOrderList("Todas las órdenes", orders);
+    }
 
-        System.Console.WriteLine("------------------------");
+    private async Task DisplayPaidOrdersAsync(CancellationToken cancellationToken)
+    {
+        IReadOnlyList<OrderDto> orders = await _paidOrdersHandler.HandleAsync(cancellationToken);
+
+        DisplayOrderList("Órdenes pagadas", orders);
+    }
+
+    private async Task DisplayUnfulfilledOrdersAsync(CancellationToken cancellationToken)
+    {
+        IReadOnlyList<OrderDto> orders = await _unfulfilledOrdersHandler.HandleAsync(
+            cancellationToken
+        );
+
+        DisplayOrderList("Órdenes no cumplidas", orders);
+    }
+
+    private static void DisplayOrderList(string title, IReadOnlyList<OrderDto> orders)
+    {
+        System.Console.WriteLine(title);
+
+        System.Console.WriteLine("----------------------------------------");
+
+        System.Console.WriteLine($"Cantidad: {orders.Count}");
 
         if (orders.Count == 0)
         {
-            System.Console.WriteLine("No se encontraron ordenes en la tienda.");
+            System.Console.WriteLine("No se encontraron órdenes.");
 
             return;
         }
@@ -83,21 +122,56 @@ public sealed class ConsoleApplication
             OrderDto order = orders[index];
 
             System.Console.WriteLine();
-            System.Console.WriteLine($"Producto {index + 1}");
 
-            System.Console.WriteLine("----------------------------------------");
+            System.Console.WriteLine($"Orden {index + 1} - {order.Name}");
 
-            System.Console.WriteLine($"Id:        {order.id}");
+            System.Console.WriteLine("------------------------------------------------");
 
-            System.Console.WriteLine($"Numero de Orden:    {order.name}");
+            System.Console.WriteLine($"Id: {order.Id}");
 
-            System.Console.WriteLine($"Cliente: {order.customerName}");
+            System.Console.WriteLine($"Cliente: {order.CustomerName}");
 
-            System.Console.WriteLine($"Fecha de creacion:      {order.createdAt}");
+            System.Console.WriteLine($"Email: {order.CustomerEmail}");
 
-            System.Console.WriteLine($"Estado de Pago:    {order.financialStatus}");
-            System.Console.WriteLine($"Estado de Orden:    {order.fulfillmentStatus}");
-            System.Console.WriteLine($"Precio:    {order.totalAmount} {order.currencyCode}");
+            System.Console.WriteLine($"Fecha de creación: {order.CreatedAt}");
+
+            System.Console.WriteLine($"Estado de pago: {order.FinancialStatus}");
+
+            System.Console.WriteLine($"Estado de fulfillment: {order.FulfillmentStatus}");
+
+            System.Console.WriteLine($"Total: {order.TotalAmount} {order.CurrencyCode}");
+
+            System.Console.WriteLine();
+
+            System.Console.WriteLine($"Line Items ({order.LineItems.Count})");
+
+            if (order.LineItems.Count == 0)
+            {
+                System.Console.WriteLine("  No hay productos en esta orden.");
+
+                continue;
+            }
+
+            for (int lineIndex = 0; lineIndex < order.LineItems.Count; lineIndex++)
+            {
+                LineItemDto lineItem = order.LineItems[lineIndex];
+
+                System.Console.WriteLine();
+
+                System.Console.WriteLine($"  Producto {lineIndex + 1}");
+
+                System.Console.WriteLine($"  Nombre: {lineItem.Name}");
+
+                System.Console.WriteLine($"  Cantidad: {lineItem.Quantity}");
+
+                System.Console.WriteLine(
+                    $"  Precio unitario: " + $"{lineItem.UnitPrice} " + $"{lineItem.CurrencyCode}"
+                );
+            }
+
+            System.Console.WriteLine();
+
+            System.Console.WriteLine("================================================");
         }
     }
 

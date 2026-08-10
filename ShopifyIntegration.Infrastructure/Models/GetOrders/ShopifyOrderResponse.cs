@@ -11,7 +11,7 @@ namespace ShopifyIntegration.Infrastructure.Models.GetOrders
         public string Name { get; init; } = string.Empty;
 
         [JsonPropertyName("customer")]
-        public required ShopifyCustomerResponse Customer { get; init; }
+        public ShopifyCustomerResponse? Customer { get; init; }
 
         [JsonPropertyName("createdAt")]
         public string CreatedAt { get; init; } = string.Empty;
@@ -24,5 +24,8 @@ namespace ShopifyIntegration.Infrastructure.Models.GetOrders
 
         [JsonPropertyName("totalPriceSet")]
         public required MoneyBagResponse TotalPriceSet { get; init; }
+
+        [JsonPropertyName("lineItems")]
+        public required LineItemConnectionResponse LineItems { get; init; }
     }
 }

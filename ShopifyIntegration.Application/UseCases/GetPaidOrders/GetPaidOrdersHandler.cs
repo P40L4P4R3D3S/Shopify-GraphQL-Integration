@@ -3,13 +3,13 @@ using ShopifyIntegration.Application.DTOs;
 using ShopifyIntegration.Application.Mappings;
 using ShopifyIntegration.Domain.Entities;
 
-namespace ShopifyIntegration.Application.UseCases.GetOrders;
+namespace ShopifyIntegration.Application.UseCases.GetPaidOrders;
 
-public sealed class GetOrdersHandler : IGetOrdersHandler
+public sealed class GetPaidOrdersHandler : IGetPaidOrdersHandler
 {
     private readonly IOrderService _orderService;
 
-    public GetOrdersHandler(IOrderService orderService)
+    public GetPaidOrdersHandler(IOrderService orderService)
     {
         _orderService = orderService;
     }
@@ -18,7 +18,7 @@ public sealed class GetOrdersHandler : IGetOrdersHandler
         CancellationToken cancellationToken = default
     )
     {
-        IReadOnlyList<Order> orders = await _orderService.GetOrdersAsync(cancellationToken);
+        IReadOnlyList<Order> orders = await _orderService.GetPaidOrdersAsync(cancellationToken);
 
         return orders.Select(OrderMapper.ToDto).ToList();
     }

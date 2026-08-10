@@ -1,13 +1,15 @@
 ﻿namespace ShopifyIntegration.Application.DTOs
 {
     public sealed record OrderDto(
-        string id,
-        string name,
-        string customerName,
-        string createdAt,
-        string financialStatus,
-        string fulfillmentStatus,
-        string totalAmount,
-        string currencyCode
+        string Id,
+        string Name,
+        string CustomerName,
+        string CustomerEmail,
+        string CreatedAt,
+        string FinancialStatus,
+        string FulfillmentStatus,
+        string TotalAmount,
+        string CurrencyCode,
+        IReadOnlyList<LineItemDto> LineItems
     );
 }
