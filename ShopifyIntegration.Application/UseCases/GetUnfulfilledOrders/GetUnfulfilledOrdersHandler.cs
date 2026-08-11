@@ -1,7 +1,7 @@
-﻿using ShopifyIntegration.Application.Abstractions;
-using ShopifyIntegration.Application.DTOs;
+﻿using ShopifyIntegration.Application.DTOs;
 using ShopifyIntegration.Application.Mappings;
 using ShopifyIntegration.Domain.Entities;
+using ShopifyIntegration.Interfaces.Services;
 
 namespace ShopifyIntegration.Application.UseCases.GetUnfulfilledOrders;
 

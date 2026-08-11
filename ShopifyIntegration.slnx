@@ -6,4 +6,5 @@
   <Project Path="ShopifyIntegration.Console/ShopifyIntegration.Console.csproj" />
   <Project Path="ShopifyIntegration.Domain/ShopifyIntegration.Domain.csproj" />
   <Project Path="ShopifyIntegration.Infrastructure/ShopifyIntegration.Infrastructure.csproj" />
+  <Project Path="ShopifyIntegration.Interfaces/ShopifyIntegration.Interfaces.csproj" Id="93c763be-2bec-4987-8afa-6c4dda98bba4" />
 </Solution>

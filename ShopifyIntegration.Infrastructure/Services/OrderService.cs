@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Options;
-using ShopifyIntegration.Application.Abstractions;
 using ShopifyIntegration.Application.Exceptions;
 using ShopifyIntegration.Domain.Entities;
 using ShopifyIntegration.Infrastructure.Configuration;
@@ -7,6 +6,7 @@ using ShopifyIntegration.Infrastructure.GraphQL.Clients;
 using ShopifyIntegration.Infrastructure.GraphQL.Models;
 using ShopifyIntegration.Infrastructure.GraphQL.Queries;
 using ShopifyIntegration.Infrastructure.Models.GetOrders;
+using ShopifyIntegration.Interfaces.Services;
 
 namespace ShopifyIntegration.Infrastructure.Services;
 

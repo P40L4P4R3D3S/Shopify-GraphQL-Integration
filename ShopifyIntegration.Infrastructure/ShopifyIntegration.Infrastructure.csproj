@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ShopifyIntegration.Application\ShopifyIntegration.Application.csproj" />
     <ProjectReference Include="..\ShopifyIntegration.Domain\ShopifyIntegration.Domain.csproj" />
+    <ProjectReference Include="..\ShopifyIntegration.Interfaces\ShopifyIntegration.Interfaces.csproj" />
   </ItemGroup>
 
 </Project>

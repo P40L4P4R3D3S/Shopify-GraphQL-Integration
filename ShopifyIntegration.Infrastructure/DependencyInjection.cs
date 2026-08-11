@@ -6,6 +6,7 @@ using ShopifyIntegration.Application.Abstractions;
 using ShopifyIntegration.Infrastructure.Configuration;
 using ShopifyIntegration.Infrastructure.GraphQL.Clients;
 using ShopifyIntegration.Infrastructure.Services;
+using ShopifyIntegration.Interfaces.Services;
 
 namespace ShopifyIntegration.Infrastructure;
 

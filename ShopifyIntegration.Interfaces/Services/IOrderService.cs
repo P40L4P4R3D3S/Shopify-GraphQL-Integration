@@ -1,6 +1,6 @@
 ﻿using ShopifyIntegration.Domain.Entities;
 
-namespace ShopifyIntegration.Application.Abstractions;
+namespace ShopifyIntegration.Interfaces.Services;
 
 public interface IOrderService
 {
